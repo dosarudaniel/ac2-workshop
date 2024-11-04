@@ -296,9 +296,9 @@ func ebgpRoutePrefixConfig(tc map[string]interface{}) gosnappi.Config {
 	ftxV4Ip.Src().SetValue(tc["txAdvRouteV4"].(string))
 	ftxV4Ip.Dst().SetValue(tc["rxAdvRouteV4"].(string))
 
-	ftxV4Tcp := ftxV4.Packet().Add().Tcp()
-	ftxV4Tcp.SrcPort().SetValue(5000)
-	ftxV4Tcp.DstPort().SetValue(6000)
+	ftxV4Udp := ftxV4.Packet().Add().Udp()
+	ftxV4Udp.SrcPort().SetValue(5000)
+	ftxV4Udp.DstPort().SetValue(6000)
 
 	ftxV6 := c.Flows().Items()[1]
 	ftxV6.SetName("ftxV6")
@@ -313,9 +313,9 @@ func ebgpRoutePrefixConfig(tc map[string]interface{}) gosnappi.Config {
 	ftxV6Ip.Src().SetValue(tc["txAdvRouteV6"].(string))
 	ftxV6Ip.Dst().SetValue(tc["rxAdvRouteV6"].(string))
 
-	ftxV6Tcp := ftxV6.Packet().Add().Tcp()
-	ftxV6Tcp.SrcPort().SetValue(5000)
-	ftxV6Tcp.DstPort().SetValue(6000)
+	ftxV6Udp := ftxV6.Packet().Add().Udp()
+	ftxV6Udp.SrcPort().SetValue(5000)
+	ftxV6Udp.DstPort().SetValue(6000)
 
 	frxV4 := c.Flows().Items()[2]
 	frxV4.SetName("frxV4")
@@ -330,9 +330,9 @@ func ebgpRoutePrefixConfig(tc map[string]interface{}) gosnappi.Config {
 	frxV4Ip.Src().SetValue(tc["rxAdvRouteV4"].(string))
 	frxV4Ip.Dst().SetValue(tc["txAdvRouteV4"].(string))
 
-	frxV4Tcp := frxV4.Packet().Add().Tcp()
-	frxV4Tcp.SrcPort().SetValue(6000)
-	frxV4Tcp.DstPort().SetValue(5000)
+	frxV4Udp := frxV4.Packet().Add().Udp()
+	frxV4Udp.SrcPort().SetValue(6000)
+	frxV4Udp.DstPort().SetValue(5000)
 
 	frxV6 := c.Flows().Items()[3]
 	frxV6.SetName("frxV6")
@@ -347,9 +347,9 @@ func ebgpRoutePrefixConfig(tc map[string]interface{}) gosnappi.Config {
 	frxV6Ip.Src().SetValue(tc["rxAdvRouteV6"].(string))
 	frxV6Ip.Dst().SetValue(tc["txAdvRouteV6"].(string))
 
-	frxV6Tcp := frxV6.Packet().Add().Tcp()
-	frxV6Tcp.SrcPort().SetValue(6000)
-	frxV6Tcp.DstPort().SetValue(5000)
+	frxV6Udp := frxV6.Packet().Add().Udp()
+	frxV6Udp.SrcPort().SetValue(6000)
+	frxV6Udp.DstPort().SetValue(5000)
 
 	return c
 }
