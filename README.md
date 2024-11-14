@@ -1,6 +1,6 @@
 # AutoCon2 WS:D1 - Automated & Scalable Network Testing with OTG - Workshop
 
-This repository containds NAF Autocon2 workshop materials. The workshop consists of necessary documentations to perform 5 labs and a 6th demo lab. Users can follow along each lab to get familiar with Open Traffic Generator (OTG) concepts. 
+This repository contains NAF Autocon2 workshop materials. The workshop consists of necessary documentations to perform 5 labs and a 6th demo lab. Users can follow along each lab to get familiar with Open Traffic Generator (OTG) concepts. 
 <br>
 <br>
 * <B>For Autocon2(AC2) users: Please use the Cloudshare link received on your email to access your environment. Ask your instructor if you do not have one</B>
