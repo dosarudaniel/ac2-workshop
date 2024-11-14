@@ -3,9 +3,9 @@
 This repository containds NAF Autocon2 workshop materials. The workshop consists of necessary documentations to perform 5 labs and a 6th demo lab. Users can follow along each lab to get familiar with Open Traffic Generator (OTG) concepts. 
 <br>
 <br>
-* **For Autocon2(AC2) users: Please use the Cloudshare link received on your email to access your environment. Ask your instructor if you do not have one.**
+* <B>For Autocon2(AC2) users: Please use the Cloudshare link received on your email to access your environment. Ask your instructor if you do not have one</B>
 <br>
-* **For all other users: If you have come to this repository outside of the AC2 workshop hours and you do not have an active cloud environment provided for the lab, you can use any Linux instance for the labs.**
+* <B>For all other users: If you have come to this repository outside of the AC2 workshop hours and you do not have an active cloud environment provided for the lab, you can use any Linux instance for the labs.</B>
 
 Here are the important materials that you will need to refer during the lab exercises.
 * [Overview presentation of OTG concepts](./Docs/AC2-WSD1-OTG.pdf)
