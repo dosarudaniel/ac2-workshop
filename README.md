@@ -9,8 +9,8 @@ This repository contains NAF Autocon2 workshop materials. The workshop consists 
 Here are the important materials that you will need to refer during the lab exercises.
 * [Overview presentation of OTG concepts](./Docs/AC2-WSD1-OTG.pdf)
 * [FAQ document](./Docs/Autocon2_WSD1_Pre-workshop%20FAQ.md)
-* Once you are connected to your Linux host follow along the [Labs documents](./Docs/Autocon2_OTG_Labs.pdf) (recommend to download the PDF )
-* All commands used in the lab for easy copy/paste: [commands.txt](./commands.txt)
+* Once you are connected to your Linux host follow along the [Lab Instructions document](./Docs/Autocon2_OTG_Labs.pdf) (recommend to download the PDF )
+* All commands used in the lab for easy copy/paste: [commands.txt](./Docs/commands.txt)
 
 You can get in touch with the OTG engineering team if you have question and comments:
 * Autocon2 workshop slack channel   : https://networkautomationfrm.slack.com/archives/C07U0FY8AMR

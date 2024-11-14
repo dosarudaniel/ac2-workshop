@@ -1,0 +1,274 @@
+#0-01	
+    cat /etc/lsb_release
+    uname -a
+#0-02
+	docker version && docker-compose version
+#0-03	
+    docker images
+#0-04	
+    docker ps
+#0-05	
+    python3 --version
+#0-06	
+    python3 -m pip install snappi==1.14.0
+#0-07	
+    git clone https://github.com/open-traffic-generator/ac2-workshop.git
+
+
+
+#1-01	
+    docker pull ghcr.io/open-traffic-generator/keng-controller:1.14.0-1
+    docker pull ghcr.io/open-traffic-generator/ixia-c-traffic-engine:1.8.0.99
+#1-02
+    docker images
+    docker ps
+#1-03	
+    sudo ip link add name veth0 type veth peer name veth1&& sudo ip link set dev veth0 up && sudo ip link set dev veth1 up
+    ip link
+#1-04	
+    docker run -d --name controller --network=host ghcr.io/open-traffic-generator/keng-controller:1.14.0-1 --http-port 8443 --accept-eula
+#1-05	
+    docker run -d --name traffic-engine-1 --network=host -e ARG_IFACE_LIST=virtual@af_packet,veth0 -e OPT_NO_HUGEPAGES=Yes --privileged -e OPT_LISTEN_PORT=5551 ghcr.io/open-traffic-generator/ixia-c-traffic-engine:1.8.0.99
+#1-06	
+    docker run -d --name traffic-engine-2 --network=host -e ARG_IFACE_LIST=virtual@af_packet,veth1 -e OPT_NO_HUGEPAGES=Yes --privileged -e OPT_LISTEN_PORT=5552 ghcr.io/open-traffic-generator/ixia-c-traffic-engine:1.8.0.99
+#1-07	
+    docker ps -a
+#1-08	
+    cd ~/ac2-workshop/lab-01
+#1-09	
+    vim lab-01_test.py
+#1-10	
+    python3 lab-01_test.py
+#1-11	
+    cat /proc/net/dev > counters1.log
+#1-12	
+    curl -k -d '{""choice"":""flow""}' -X POST https://127.0.0.1:8443/monitor/metrics
+    curl -k -d '{""choice"":""port""}' -X POST https://127.0.0.1:8443/monitor/metrics
+#1-13	
+    vim lab-01_test.py
+#1-14	
+    git diff
+#1-15	
+    python3 lab-01_test.py
+#1-16	
+    cat /proc/net/dev > counters2.log
+    diff counters1.log counters2.log
+#1-17	
+    docker ps -a
+#1-18	
+    bash -c "$(curl -sL https://get.otgcdn.net/otgen)" -- -v 0.6.2
+#1-19	
+    curl -k https://127.0.0.1:8443/config > ./lab-01-config.json
+#1-20	
+    more lab-01-config.json
+#1-21	
+    otgen run -k -a https://127.0.0.1:8443 -f lab-01-config.json -m flow | otgen transform -m flow  | otgen display --mode table
+#1-22	
+    otgen run -k -a https://127.0.0.1:8443 -f lab-01-config.json -m port | otgen transform -m port | otgen display --mode table
+#1-23	
+    vi lab-01-config.json
+#1-24	
+    otgen run -k -a https://127.0.0.1:8443 -f lab-01-config.json -m flow | otgen transform -m flow  | otgen display --mode table
+#1-25	
+    export OTG_API="https://localhost:8443"
+    export OTG_LOCATION_P1="localhost:5551" 
+    export OTG_LOCATION_P2="localhost:5552"
+#1-26	
+    otgen create flow -s 1.1.1.1 -d 2.2.2.2 -p 80 --rate 100 --count 2000 | otgen run --insecure --metrics flow | otgen transform --metrics flow –counters \ frames | otgen display --mode table
+#1-27	
+    curl -k https://127.0.0.1:8443/config
+#1-28	
+    docker stop traffic-engine-1 traffic-engine-2 controller && docker rm traffic-engine-1 traffic-engine-2 controller
+#1-29   
+    docker ps -a
+    docker images
+#1-30	
+    sudo ip link delete veth0
+#1-31	
+    ip link && ip addr
+	
+	
+
+#2-01	
+    cd ~/ac2-workshop/lab-02
+    cat compose.yml
+#2-02	
+    docker-compose -f compose.yml up -d
+    sudo bash connect_containers_veth.sh lab-02_traffic_engine_1_1 lab-02_traffic_engine_2_1 veth0 veth1
+#2-03	
+    docker ps
+#2-04	
+    docker logs lab-02_traffic_engine_1_1
+#2-05	
+    docker logs lab-02_traffic_engine_2_1
+#2-06   
+    docker network ls
+    docker inspect lab-02_default
+#2-07	
+    docker network ls
+    docker inspect lab-02_default
+#2-08	
+    vi lab-02_test.py
+#2-09	
+    python3 lab-02_test.py
+#2-10	
+    curl -k -d '{"choice":"bgpv4"}' -X POST https://127.0.0.1:8443/monitor/metrics
+#2-11	
+    curl -k -d '{"choice":"ipv4_neighbors"}' -X POST https://127.0.0.1:8443/monitor/states
+#2-12	
+    curl -k -d '{"choice":"bgp_prefixes"}' -X POST https://127.0.0.1:8443/monitor/states
+#2-13   
+    vi lab-02_test.py
+#2-14	
+    sudo apt install tshark -y
+    ll
+#2-15	
+    tshark -r prx.pcap
+#2-16	
+    nano lab-02_test.py
+#2-17	
+    python3 lab-02_test.py
+#2-18	
+    nano lab-02_test.py
+#2-19	
+    tshark -r prx.pcap -Y tcp
+#2-20   
+    docker-compose down
+#2-21	
+    sudo ip netns del lab-02_traffic_engine_1_1 && sudo ip netns del lab-02_traffic_engine_2_1
+	
+
+
+#3-00	
+    bash -c "$(curl -sL https://get.containerlab.dev)" -- -v 0.59.0
+#3-01	
+    cd ~/ac2-workshop/lab-03 && cat lab-03.yml
+#3-02	
+    sudo containerlab deploy -t lab-03.yml
+#3-03	
+    vi lab-03-1_test.py
+#3-04	
+    cat lab-03-1_test.py
+#3-05	
+    python3 lab-03-1_test.py
+#3-06
+    cp lab-03-1_test.py lab-03-2_test.py
+    vi lab-03-2_test.py
+#3-07	
+    python3 lab-03-2_test.py
+#3-08	
+    vim lab-03-2_test.py
+#3-09	
+    ssh admin@clab-lab-03-srl
+#3-10	
+    enter candidate
+    set qos rewrite-rules dscp-policy test-rewrite map FC1 dscp 30
+    commit now
+    quit
+#3-11	
+    python3 lab-03-2_test.py
+#3-12	
+    sudo containerlab destroy -t lab-03.yml --cleanup
+	
+
+
+#4-01	
+    cd ~/ac2-workshop/lab-04 && cat lab-04.yml
+#4-02	
+    sudo containerlab deploy -t lab-04.yml
+#4-03	
+    vim lab-04-1_test.py
+#4-04	
+    git diff lab-04-1_test.py
+#4-05	
+    ssh admin@clab-lab-04-srl
+#4-06	
+    watch show network-instance default protocols bgp routes ipv4 summary
+#4-07	
+    python3 lab-04-1_test.py
+#4-08	
+    curl -k -d '{"choice":"bgpv4"}' -X POST https://clab-lab-04-ixia-c:8443/monitor/metrics
+#4-09	
+    curl -k -d '{"choice":"bgp_prefixes"}' -X POST https://clab-lab-04-ixia-c:8443/monitor/states
+#4-10	
+    curl -k -d '{"choice":"flow"}' -X POST https://clab-lab-04-ixia-c:8443/monitor/metrics
+#4-11	
+    vim lab-04-1_test.py
+#4-12	
+    python3 lab-04-1_test.py
+#4-13	
+    vim lab-04-1_test.py
+#4-14	
+    python3 lab-04-1_test.py
+#4-15	
+    sudo containerlab destroy -t lab-04.yml --cleanup
+	
+
+	
+#5-01	
+    [ $(uname -m) = x86_64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.24.0/kind-linux-amd64
+    chmod +x ./kind
+    sudo mv ./kind /usr/local/bin/kind
+#5-02	
+    curl -LO https://dl.k8s.io/release/v1.27.3/bin/linux/amd64/kubectl
+    sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+#5-03	
+    cd ~ && wget https://go.dev/dl/go1.23.2.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.23.2.linux-amd64.tar.gz
+#5-04	
+    export PATH=$PATH:/usr/local/go/bin && echo ""export PATH=$PATH:/usr/local/go/bin"" >> ~/.bashrc
+    go version
+#5-05	
+    wget https://github.com/openconfig/kne/archive/refs/tags/v0.2.1.tar.gz && tar -xvzf v0.2.1.tar.gz
+    cd kne-0.2.1 && make install
+#5-06	
+    bash -c "$(curl -sL https://get-gnmic.openconfig.net)"
+#5-07	
+    cd ~/ac2-workshop/lab-05 && cat kind-bridge.yaml
+#5-08	
+    cat ixiatg-configmap.yaml
+#5-09	
+    kne deploy kind-bridge.yaml
+#5-10	
+    kubectl get pods -A
+#5-11	
+    ./load.sh
+#5-12	
+    cat ixia-c-b2b.textproto
+#5-13	
+    kne create ixia-c-b2b.textproto
+#5-14	
+    kubectl get pods -n ixia-c-b2b -o wide
+    kubectl get services -n ixia-c-b2b
+#5-15	
+    kubectl describe pods otg-port-eth1 -n ixia-c-b2b
+#5-16	
+    kubectl get services -n ixia-c-b2b
+#5-17	
+    vim lab-05-1_test.py
+#5-18	
+    python3 lab-05-1_test.py
+#5-19	
+    vim lab-05-2_test.py
+#5-20	
+    python3 lab-05-2_test.py
+#5-21	
+    vim lab-05-3_test.go
+#5-22	
+    go test -v lab-05-3_test.go
+#5-23	
+    kubectl get services -n ixia-c-b2b
+#5-24	
+    vim lab-05-3_test.go
+#5-25	
+    go test -v lab-05-3_test.go
+#5-26
+    kubectl describe pods otg-controller -n ixia-c-b2b
+#5-27	
+    kubectl get services -n ixia-c-b2b
+#5-28	
+    gnmic -a 172.18.0.85:50051 --skip-verify -u admin -p admin get --path "flows"
+#5-29	
+    gnmic -a 172.18.0.85:50051 --skip-verify -u admin -p admin get --path "bgp-peers"
+#5-30	
+    kind delete cluster --name kne
