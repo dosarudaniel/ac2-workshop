@@ -162,8 +162,8 @@ def ibgp_route_prefix_config(api, tc):
     d3_bgpv4_peer_rrv4 = d3_bgpv4_peer.v4_routes.add(name="d3_bgpv4_peer_rrv4")
     d3_bgpv4_peer_rrv4.set(
         next_hop_ipv4_address=tc["3Ip"],
-        next_hop_address_type=d2_bgpv4_peer_rrv4.IPV4,
-        next_hop_mode=d2_bgpv4_peer_rrv4.MANUAL,
+        next_hop_address_type=d3_bgpv4_peer_rrv4.IPV4,
+        next_hop_mode=d3_bgpv4_peer_rrv4.MANUAL,
     )
     d3_bgpv4_peer_rrv4.addresses.add(
         address=tc["startDstRoute"], prefix=32, count=tc["routeCount"], step=1
