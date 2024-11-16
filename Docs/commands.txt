@@ -1,5 +1,5 @@
 #0-01	
-    cat /etc/lsb-release
+    cat /etc/lsb_release
     uname -a
 #0-02
 	docker version && docker-compose version
