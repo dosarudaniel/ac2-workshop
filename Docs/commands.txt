@@ -2,7 +2,7 @@
     cat /etc/lsb-release
     uname -a
 #0-02
-	docker version && docker-compose version
+    docker version && docker-compose version
 #0-03	
     docker images
 #0-04	
