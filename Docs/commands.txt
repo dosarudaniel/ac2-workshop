@@ -23,7 +23,7 @@
     docker images
     docker ps
 #1-03	
-    sudo ip link add name veth0 type veth peer name veth1&& sudo ip link set dev veth0 up && sudo ip link set dev veth1 up
+    sudo ip link add name veth0 type veth peer name veth1 && sudo ip link set dev veth0 up && sudo ip link set dev veth1 up
     ip link
 #1-04	
     docker run -d --name controller --network=host ghcr.io/open-traffic-generator/keng-controller:1.14.0-1 --http-port 8443 --accept-eula
