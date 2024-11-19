@@ -42,8 +42,8 @@
 #1-11	
     cat /proc/net/dev > counters1.log
 #1-12	
-    curl -k -d '{""choice"":""flow""}' -X POST https://127.0.0.1:8443/monitor/metrics
-    curl -k -d '{""choice"":""port""}' -X POST https://127.0.0.1:8443/monitor/metrics
+    curl -k -d '{"choice":"flow"}' -X POST https://127.0.0.1:8443/monitor/metrics
+    curl -k -d '{"choice":"port"}' -X POST https://127.0.0.1:8443/monitor/metrics
 #1-13	
     vim lab-01_test.py
 #1-14	
