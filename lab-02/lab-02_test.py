@@ -38,29 +38,29 @@ def Test_ebgp_route_prefix():
     c = ebgp_route_prefix_config(api, test_const)
 
     api.set_config(c)
-
+    
     start_protocols(api)
-
+    
     wait_for(lambda: bgp_metrics_ok(api, test_const),"correct bgp peering")
-
+    
     wait_for(lambda: bgp_prefixes_ok(api, test_const),"correct bgp prefixes")
-
+    
     # start_capture(api)
-
+    
     start_transmit(api)
-
+    
     wait_for(lambda: flow_metrics_ok(api, test_const), "flow metrics",2,90)
 
     # stop_capture(api)
-
+    
     # get_capture(api, "prx", "prx.pcap")
     # get_capture(api, "ptx", "ptx.pcap")
 
 
 def ebgp_route_prefix_config(api, tc):
     c = api.config()
-    ptx = c.ports.add(name="ptx", location="localhost:5551+localhost:50071")
-    prx = c.ports.add(name="prx", location="localhost:5552+localhost:50072")
+    ptx = c.ports.add(name="ptx", location="localhost:5551;1+localhost:50071;veth0")
+    prx = c.ports.add(name="prx", location="localhost:5551;2+localhost:50071;veth1")
     
     # capture configuration
 
@@ -236,12 +236,12 @@ def ebgp_route_prefix_config(api, tc):
         tx_names=[dtx_bgpv4_peer_rrv4.name], rx_names=[drx_bgpv4_peer_rrv4.name]
     )
 
-    ftx_v4_eth, ftx_v4_ip, ftx_v4_udp = ftx_v4.packet.ethernet().ipv4().udp()
+    ftx_v4_eth, ftx_v4_ip, ftx_v4_tcp = ftx_v4.packet.ethernet().ipv4().tcp()
     ftx_v4_eth.src.value = dtx_eth.mac
     ftx_v4_ip.src.value = tc["txAdvRouteV4"]
     ftx_v4_ip.dst.value = tc["rxAdvRouteV4"]
-    ftx_v4_udp.src_port.value = 5000
-    ftx_v4_udp.dst_port.value = 6000
+    ftx_v4_tcp.src_port.value = 5000
+    ftx_v4_tcp.dst_port.value = 6000
 
     ftx_v6 = c.flows[1]
     ftx_v6.name = "ftx_v6"
@@ -249,12 +249,12 @@ def ebgp_route_prefix_config(api, tc):
         tx_names=[dtx_bgpv4_peer_rrv6.name], rx_names=[drx_bgpv4_peer_rrv6.name]
     )
 
-    ftx_v6_eth, ftx_v6_ip, ftx_v6_udp = ftx_v6.packet.ethernet().ipv6().udp()
+    ftx_v6_eth, ftx_v6_ip, ftx_v6_tcp = ftx_v6.packet.ethernet().ipv6().tcp()
     ftx_v6_eth.src.value = dtx_eth.mac
     ftx_v6_ip.src.value = tc["txAdvRouteV6"]
     ftx_v6_ip.dst.value = tc["rxAdvRouteV6"]
-    ftx_v6_udp.src_port.value = 5000
-    ftx_v6_udp.dst_port.value = 6000
+    ftx_v6_tcp.src_port.value = 5000
+    ftx_v6_tcp.dst_port.value = 6000
 
     frx_v4 = c.flows[2]
     frx_v4.name = "frx_v4"
@@ -262,12 +262,12 @@ def ebgp_route_prefix_config(api, tc):
         tx_names=[drx_bgpv4_peer_rrv4.name], rx_names=[dtx_bgpv4_peer_rrv4.name]
     )
 
-    frx_v4_eth, frx_v4_ip, frx_v4_udp = frx_v4.packet.ethernet().ipv4().udp()
+    frx_v4_eth, frx_v4_ip, frx_v4_tcp = frx_v4.packet.ethernet().ipv4().tcp()
     frx_v4_eth.src.value = drx_eth.mac
     frx_v4_ip.src.value = tc["rxAdvRouteV4"]
     frx_v4_ip.dst.value = tc["txAdvRouteV4"]
-    frx_v4_udp.src_port.value = 5000
-    frx_v4_udp.dst_port.value = 6000
+    frx_v4_tcp.src_port.value = 5000
+    frx_v4_tcp.dst_port.value = 6000
 
     frx_v6 = c.flows[3]
     frx_v6.name = "frx_v6"
@@ -275,12 +275,12 @@ def ebgp_route_prefix_config(api, tc):
         tx_names=[drx_bgpv4_peer_rrv6.name], rx_names=[dtx_bgpv4_peer_rrv6.name]
     )
 
-    frx_v6_eth, frx_v6_ip, frx_v6_udp = frx_v6.packet.ethernet().ipv6().udp()
+    frx_v6_eth, frx_v6_ip, frx_v6_tcp = frx_v6.packet.ethernet().ipv6().tcp()
     frx_v6_eth.src.value = drx_eth.mac
     frx_v6_ip.src.value = tc["rxAdvRouteV6"]
     frx_v6_ip.dst.value = tc["txAdvRouteV6"]
-    frx_v6_udp.src_port.value = 5000
-    frx_v6_udp.dst_port.value = 6000
+    frx_v6_tcp.src_port.value = 5000
+    frx_v6_tcp.dst_port.value = 6000
 
     # print("Config:\n%s", c)
     return c
